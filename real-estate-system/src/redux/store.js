@@ -1,0 +1,35 @@
+import { configureStore, combineReducers } from '@reduxjs/toolkit';
+import userReducer from './user/userSlice';
+import { persistReducer, persistStore } from 'redux-persist';
+import storage from 'redux-persist/lib/storage'; // or local storage
+
+const rootReducer = combineReducers({
+  user: userReducer,
+});
+
+const persistConfig = {
+  key: 'root',
+  storage,
+  version: 1,
+};
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+export const store = configureStore({
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
+});
+
+// Add a fallback for persistor creation
+let persistor;
+try {
+  persistor = persistStore(store);
+} catch (error) {
+  console.error('Error initializing persistor:', error);
+  persistor = null;
+}
+
+export { persistor };
