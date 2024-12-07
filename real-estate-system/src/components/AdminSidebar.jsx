@@ -98,6 +98,12 @@ const handleDeleteUser = async () => {
           Show Listings
         </NavLink>
         <NavLink
+          to="/dashboard?tab=manage-listings"
+          className="p-1 text-gray-700 mb-1 hover:text-orange-400"
+        >
+          Manage Listings
+        </NavLink>
+        <NavLink
           to="/dashboard?tab=users"
           className="p-1 text-gray-700 mb-1 hover:text-orange-400"
         >

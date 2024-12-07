@@ -141,16 +141,7 @@ export const userViews = async (req, res) => {
     res.status(500).json({ error: 'An error occurred' });
   }
 };
-/*export const dashboardData= async (req, res) => {
-  try {
-    const totalListings = await Listing.countDocuments({});
-    const totalUsers = await User.countDocuments({});
-    const totalReviews = await Review.countDocuments({});
-    res.json({ totalListings, totalUsers, totalReviews });
-  } catch (error) {
-    res.status(500).json({ error: "Server Error" });
-  }
-}; */
+
 export const subscribe= async (req, res) => {
   try {
     const { name, email, phone } = req.body;

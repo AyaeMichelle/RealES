@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import ListingItem from '../components/ListingItem';
 import SubscriptionForm from '../components/Subscribe';
 
+
 export default function Home() {
   const [offerListings, setOfferListings] = useState([]);
   const [saleListings, setSaleListings] = useState([]);
@@ -12,7 +13,7 @@ export default function Home() {
   useEffect(() => {
     const fetchOfferListings = async () => {
       try {
-        const res = await fetch('/api/listing/get?offer=true&limit=4');
+        const res = await fetch('/api/listing/get?offer=true&limit=6');
         const data = await res.json();
         setOfferListings(data);
         fetchRentListings();
@@ -22,7 +23,7 @@ export default function Home() {
     };
     const fetchRentListings = async () => {
       try {
-        const res = await fetch('/api/listing/get?type=rent&limit=4');
+        const res = await fetch('/api/listing/get?type=rent&limit=6');
         const data = await res.json();
         setRentListings(data);
         fetchSaleListings();
@@ -32,7 +33,7 @@ export default function Home() {
     };
     const fetchSaleListings = async () => {
       try {
-        const res = await fetch('/api/listing/get?type=sale&limit=4');
+        const res = await fetch('/api/listing/get?type=sale&limit=6');
         const data = await res.json();
         setSaleListings(data);
       } catch (error) {
@@ -52,7 +53,14 @@ export default function Home() {
 
   return (
     <div>
-    <div className="max-w-6xl mx-auto p-5">
+
+      <button
+         className="fixed bottom-20 right-0  bg-orange-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-700 transform rotate-90"
+          onClick={() => alert('Feedback feature coming soon!')}
+         >
+          Feedback
+        </button>
+    <div className="max-w-full mx-auto p-5">
       {/* Unified Top Section with Two Columns */}
       <div className="flex flex-col lg:flex-row items-center h-[60vh] gap-8 p-8 rounded-top-md bg-white shadow-lg">
         {/* Left Column with Text */}
@@ -141,6 +149,8 @@ export default function Home() {
     <div className="my-custom-class">
        <SubscriptionForm />
       </div>
+    
     </div>
+    
   );
 }

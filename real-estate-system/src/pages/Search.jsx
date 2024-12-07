@@ -14,10 +14,6 @@ export default function Search() {
     offer: false,
     sort: 'created_at',
     order: 'desc',
-    bedrooms: '', // New
-    bathrooms: '', // New
-    minPrice: '', // New
-    maxPrice: '', // New
   });
 
   const [loading, setLoading] = useState(false);
@@ -73,55 +69,39 @@ export default function Search() {
   }, [location.search]);
 
   const handleChange = (e) => {
-    const { id, value } = e.target;
-  
-    // For number fields, ensure valid numbers are being stored
-    if (['bedrooms', 'bathrooms', 'minPrice', 'maxPrice'].includes(id)) {
-      setSidebardata((prev) => ({
-        ...prev,
-        [id]: value ? Number(value) : '', // Convert to number or reset to an empty string
-      }));
-      return;
-    }
-  
     if (
-      id === 'all' ||
-      id === 'rent' ||
-      id === 'sale'
+      e.target.id === 'all' ||
+      e.target.id === 'rent' ||
+      e.target.id === 'sale'
     ) {
-      setSidebardata((prev) => ({
-        ...prev,
-        type: id,
-      }));
-      return;
+      setSidebardata({ ...sidebardata, type: e.target.id });
     }
-  
-    if (id === 'searchTerm') {
-      setSidebardata((prev) => ({
-        ...prev,
-        searchTerm: value,
-      }));
-      return;
+
+    if (e.target.id === 'searchTerm') {
+      setSidebardata({ ...sidebardata, searchTerm: e.target.value });
     }
-  
-    if (['parking', 'furnished', 'offer'].includes(id)) {
-      setSidebardata((prev) => ({
-        ...prev,
-        [id]: e.target.checked,
-      }));
-      return;
+
+    if (
+      e.target.id === 'parking' ||
+      e.target.id === 'furnished' ||
+      e.target.id === 'offer'
+    ) {
+      setSidebardata({
+        ...sidebardata,
+        [e.target.id]:
+          e.target.checked || e.target.checked === 'true' ? true : false,
+      });
     }
-  
-    if (id === 'sort_order') {
-      const [sort, order] = value.split('_');
-      setSidebardata((prev) => ({
-        ...prev,
-        sort: sort || 'created_at',
-        order: order || 'desc',
-      }));
+
+    if (e.target.id === 'sort_order') {
+      const sort = e.target.value.split('_')[0] || 'created_at';
+
+      const order = e.target.value.split('_')[1] || 'desc';
+
+      setSidebardata({ ...sidebardata, sort, order });
     }
   };
-  
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const urlParams = new URLSearchParams();
@@ -132,10 +112,6 @@ export default function Search() {
     urlParams.set('offer', sidebardata.offer);
     urlParams.set('sort', sidebardata.sort);
     urlParams.set('order', sidebardata.order);
-    if (sidebardata.bedrooms) urlParams.set('bedrooms', sidebardata.bedrooms);
-    if (sidebardata.bathrooms) urlParams.set('bathrooms', sidebardata.bathrooms);
-    if (sidebardata.minPrice) urlParams.set('minPrice', sidebardata.minPrice);
-    if (sidebardata.maxPrice) urlParams.set('maxPrice', sidebardata.maxPrice);
     const searchQuery = urlParams.toString();
     navigate(`/search?${searchQuery}`);
   };
@@ -170,48 +146,6 @@ export default function Search() {
               onChange={handleChange}
             />
           </div>
-          <div className='flex gap-2 flex-wrap items-center'>
-  <label className='font-semibold'>Bedrooms:</label>
-  <input
-    type='number'
-    id='bedrooms'
-    className='border rounded-lg p-3 w-20'
-    placeholder='e.g. 3'
-    value={sidebardata.bedrooms}
-    onChange={handleChange}
-  />
-</div>
-<div className='flex gap-2 flex-wrap items-center'>
-  <label className='font-semibold'>Bathrooms:</label>
-  <input
-    type='number'
-    id='bathrooms'
-    className='border rounded-lg p-3 w-20'
-    placeholder='e.g. 2'
-    value={sidebardata.bathrooms}
-    onChange={handleChange}
-  />
-</div>
-<div className='flex gap-2 flex-wrap items-center'>
-  <label className='font-semibold'>Price Range:</label>
-  <input
-    type='number'
-    id='minPrice'
-    className='border rounded-lg p-3 w-28'
-    placeholder='Min Price'
-    value={sidebardata.minPrice}
-    onChange={handleChange}
-  />
-  <input
-    type='number'
-    id='maxPrice'
-    className='border rounded-lg p-3 w-28'
-    placeholder='Max Price'
-    value={sidebardata.maxPrice}
-    onChange={handleChange}
-  />
-</div>
-
           <div className='flex gap-2 flex-wrap items-center'>
             <label className='font-semibold'>Type:</label>
             <div className='flex gap-2'>
@@ -287,12 +221,12 @@ export default function Search() {
               className='border rounded-lg p-3'
             >
               <option value='regularPrice_desc'>Price high to low</option>
-              <option value='regularPrice_asc'>Price low to hight</option>
+              <option value='regularPrice_asc'>Price low to high</option>
               <option value='createdAt_desc'>Latest</option>
               <option value='createdAt_asc'>Oldest</option>
             </select>
           </div>
-          <button className='bg-slate-700 text-white p-4 rounded-lg uppercase hover:opacity-95'>
+          <button className='bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95'>
             Search
           </button>
         </form>
